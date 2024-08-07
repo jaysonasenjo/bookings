@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.allopen") version "2.0.0"
@@ -12,6 +14,7 @@ repositories {
 val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
+val h2DriverVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
@@ -21,6 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-hibernate-orm")
+    implementation("io.quarkus:quarkus-jdbc-h2:$h2DriverVersion")
     testImplementation("io.quarkus:quarkus-junit5")
 }
 
@@ -42,7 +46,10 @@ allOpen {
     annotation("io.quarkus.test.junit.QuarkusTest")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
-    kotlinOptions.javaParameters = true
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        javaParameters.set(true)
+    }
 }
