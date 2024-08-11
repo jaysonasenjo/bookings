@@ -26,13 +26,6 @@ class AccountServiceImpl(
     }
 
     override fun getAll(): List<Account> {
-        val accounts = accountRepository.findAll()
-        add(AccountService.InsertAccountRequest.create(
-            name = "account ${accounts.size}",
-            userId = "user ${accounts.size}",
-            description = "some boring description ${accounts.size}"
-        ))
-
         return accountRepository.findAll().toList().mapNotNull { AccountMapper.INSTANCE.map(it) }
     }
 }
