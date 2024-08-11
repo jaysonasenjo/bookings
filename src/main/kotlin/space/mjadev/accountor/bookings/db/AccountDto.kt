@@ -1,24 +1,28 @@
 package space.mjadev.accountor.bookings.db
 
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 
 @Entity
-class AccountDto {
+data class AccountDto(
 
     @Id
     @GeneratedValue
     @Column(name = "id_account", nullable = false, updatable = false)
-    var accountId: Long? = null
+    var accountId: Long? = null,
 
     @Column(name = "txt_name", nullable = false)
-    lateinit var name: String
+    var name: String,
 
     @Column(name = "id_user", nullable = false)
-    lateinit var user: String
+    var user: String,
 
     @Column(name = "txt_description")
-    var description: String? = null
+    var description: String? = null,
 
-    @OneToMany(targetEntity = BookingDto::class)
-    var bookings: List<BookingDto>? = ArrayList()
-}
+    @OneToMany(mappedBy = "account")
+    val bookings: MutableList<BookingDto> = mutableListOf()
+)

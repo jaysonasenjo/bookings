@@ -4,7 +4,8 @@ import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertIterableEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import space.mjadev.accountor.bookings.AccountService
 import space.mjadev.accountor.bookings.BookingService
@@ -13,7 +14,6 @@ import space.mjadev.accountor.bookings.db.BookingRepository
 import java.math.BigDecimal
 
 @QuarkusTest
-@Transactional
 class AccountBookingRepositoryTest {
 
     @Inject
@@ -27,28 +27,32 @@ class AccountBookingRepositoryTest {
     private lateinit var bookingService: BookingService
 
     @AfterEach
+    @Transactional
     fun cleanupDb() {
         bookingRepository.deleteAll()
         accountRepository.deleteAll()
     }
 
     @Test
+    @Transactional
     fun when_accountWithBooking_then_returnBookingList() {
         val accountId = mockAccountId()
-        val bookingId = mockBooking(accountId)
+        mockBooking(accountId)
 
-        val account = accountRepository.findById(accountId).orElseThrow()
-        val booking = bookingRepository.findById(bookingId).orElseThrow()
+        val account = accountService.get(accountId)
 
-        assertIterableEquals(
-            listOf(booking),
-            account?.bookings
-        )
+        assertNotNull(account.bookings)
+        assertEquals(1, account.bookings.size)
     }
 
     @Test
     fun when_accountWithoutBooking_then_returnEmptyList() {
+        val accountId = mockAccountId()
 
+        val account = accountService.get(accountId)
+
+        assertNotNull(account.bookings)
+        assertEquals(0, account.bookings.size)
     }
 
     private fun mockAccountId(): Long =

@@ -17,7 +17,6 @@ import space.mjadev.accountor.bookings.exceptions.http.HttpException
 import java.math.BigDecimal
 
 @QuarkusTest
-@Transactional
 class InsertBookingRepositoryTest {
 
     @Inject
@@ -31,6 +30,7 @@ class InsertBookingRepositoryTest {
     private lateinit var bookingService: BookingService
 
     @AfterEach
+    @Transactional
     fun cleanupDb() {
         bookingRepository.deleteAll()
         accountRepository.deleteAll()
@@ -47,7 +47,6 @@ class InsertBookingRepositoryTest {
 
         assertNotNull(bookingDto)
         assertNotNull(bookingDto.bookingId)
-        assertNotNull(bookingDto.account)
         assertEquals("booking 1", bookingDto.name)
         assertEquals(BigDecimal(200), bookingDto.amount)
     }

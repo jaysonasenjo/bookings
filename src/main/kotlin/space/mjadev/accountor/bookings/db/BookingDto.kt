@@ -1,29 +1,33 @@
 package space.mjadev.accountor.bookings.db
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 
-import jakarta.persistence.*
 import java.math.BigDecimal
 
 @Entity
-class BookingDto {
-
+data class BookingDto(
     @Id
     @GeneratedValue
     @Column(name = "id_booking", nullable = false, updatable = false)
-    var bookingId: Long? = null
+    var bookingId: Long? = null,
 
     @Column(name = "txt_name", nullable = false)
-    lateinit var name: String
+    var name: String,
 
     @JoinColumn(name = "id_account", nullable = false)
     @ManyToOne
-    lateinit var account: AccountDto
+    var account: AccountDto? = null,
 
     @Column(name = "txt_description")
-    var description: String? = null
+    var description: String? = null,
 
     @Column(name = "num_amount", nullable = false)
-    lateinit var amount: BigDecimal
+    var amount: BigDecimal,
 
     @Column(name = "txt_currency")
     var currency: String? = null
-}
+)

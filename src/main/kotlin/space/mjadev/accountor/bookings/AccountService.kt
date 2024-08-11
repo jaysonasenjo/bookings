@@ -7,11 +7,12 @@ import space.mjadev.accountor.bookings.models.Account
 interface AccountService {
 
     fun add(request: InsertAccountRequest): Account
+    fun get(accountId: Long): Account
 
     class InsertAccountRequest private constructor(
         val name: String,
-        val userId: String,
-        val description: String?) {
+        private val userId: String,
+        private val description: String?) {
 
         companion object {
             fun create(name: String,
@@ -22,12 +23,6 @@ interface AccountService {
             }
         }
 
-        fun toDto(): AccountDto {
-            val dto = AccountDto()
-            dto.name = name
-            dto.user = userId
-            dto.description = description
-            return dto
-        }
+        fun toDto(): AccountDto = AccountDto(name = name, user = userId, description = description)
     }
 }

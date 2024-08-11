@@ -1,7 +1,8 @@
 package space.mjadev.accountor.bookings.exceptions.http
 
-enum class ErrorCode(code: Int) {
+enum class ErrorCode {
 
-    INVALID(400),
-    NOT_FOUND(404)
+    INVALID,
+    NOT_FOUND,
+    SERVER_ERROR
 }

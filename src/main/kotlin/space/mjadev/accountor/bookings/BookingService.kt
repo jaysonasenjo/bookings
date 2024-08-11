@@ -27,13 +27,11 @@ interface BookingService {
             }
         }
 
-        fun toDto(): BookingDto {
-            val dto = BookingDto()
-            dto.name = name
-            dto.amount = amount
-            dto.currency = currency
-            dto.description = description
-            return dto
-        }
+        fun toDto(): BookingDto = BookingDto(
+            name = name,
+            amount = amount,
+            currency = currency,
+            description = description
+        )
     }
 }

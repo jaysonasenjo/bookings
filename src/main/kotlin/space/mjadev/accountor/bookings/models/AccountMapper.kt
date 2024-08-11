@@ -1,17 +1,21 @@
 package space.mjadev.accountor.bookings.models
 
-import org.mapstruct.Mapper
-import org.mapstruct.Mapping
-import org.mapstruct.factory.Mappers
 import space.mjadev.accountor.bookings.db.AccountDto
+import space.mjadev.accountor.bookings.exceptions.http.TechException
 
-@Mapper(uses = [BookingMapper::class])
-interface AccountMapper {
+class AccountMapper private constructor() {
 
     companion object {
-        val INSTANCE = Mappers.getMapper(AccountMapper::class.java)
+        val INSTANCE: AccountMapper = AccountMapper()
     }
 
-    @Mapping(source = "user", target = "userId")
-    fun map(dto: AccountDto): Account
+    fun map(dto: AccountDto?): Account? = dto?.toModel()
+
+    private fun AccountDto.toModel(): Account = Account(
+        accountId = accountId ?: throw TechException("missing id $this"),
+        name = name,
+        userId = user,
+        description = description,
+        bookings = bookings.mapNotNull { BookingMapper.INSTANCE.map(it) }
+    )
 }

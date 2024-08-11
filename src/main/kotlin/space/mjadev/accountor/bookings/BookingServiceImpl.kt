@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional
 import space.mjadev.accountor.bookings.db.AccountRepository
 import space.mjadev.accountor.bookings.db.BookingRepository
 import space.mjadev.accountor.bookings.exceptions.http.NotFoundException
+import space.mjadev.accountor.bookings.exceptions.http.TechException
 import space.mjadev.accountor.bookings.models.Booking
 import space.mjadev.accountor.bookings.models.BookingMapper
 
@@ -21,6 +22,6 @@ class BookingServiceImpl : BookingService {
     override fun add(request: BookingService.InsertBookingRequest): Booking {
         val bookingDto = request.toDto()
         bookingDto.account = accountRepository.findById(request.accountId).orElseThrow { NotFoundException() }
-        return BookingMapper.INSTANCE.map(bookingRepository.save(bookingDto))
+        return BookingMapper.INSTANCE.map(bookingRepository.save(bookingDto)) ?: throw TechException("failed to create $request")
     }
 }

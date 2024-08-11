@@ -5,5 +5,5 @@ data class Account(
     var userId: String,
     var name: String,
     var description: String? = null,
-    var bookings: List<Booking>? = ArrayList()
+    var bookings: List<Booking>
 )
