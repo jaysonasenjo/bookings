@@ -1,7 +1,6 @@
 package space.mjadev.accountor.bookings
 
 import jakarta.enterprise.context.ApplicationScoped
-import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import space.mjadev.accountor.bookings.db.AccountRepository
 import space.mjadev.accountor.bookings.db.BookingRepository
@@ -11,12 +10,10 @@ import space.mjadev.accountor.bookings.models.Account
 import space.mjadev.accountor.bookings.models.AccountMapper
 
 @ApplicationScoped
-class AccountServiceImpl: AccountService {
-
-    @Inject
-    private lateinit var accountRepository: AccountRepository
-    @Inject
-    private lateinit var bookingRepository: BookingRepository
+class AccountServiceImpl(
+    private val accountRepository: AccountRepository,
+    private val bookingRepository: BookingRepository
+): AccountService {
 
     @Transactional
     override fun add(request: AccountService.InsertAccountRequest) = AccountMapper.INSTANCE
@@ -26,5 +23,16 @@ class AccountServiceImpl: AccountService {
         val account = accountRepository.findById(accountId).orElseThrow { NotFoundException() }
         account.bookings.addAll(bookingRepository.findBookingsByAccount(account))
         return AccountMapper.INSTANCE.map(account) ?: throw TechException()
+    }
+
+    override fun getAll(): List<Account> {
+        val accounts = accountRepository.findAll()
+        add(AccountService.InsertAccountRequest.create(
+            name = "account ${accounts.size}",
+            userId = "user ${accounts.size}",
+            description = "some boring description ${accounts.size}"
+        ))
+
+        return accountRepository.findAll().toList().mapNotNull { AccountMapper.INSTANCE.map(it) }
     }
 }

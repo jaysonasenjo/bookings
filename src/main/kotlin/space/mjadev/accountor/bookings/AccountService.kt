@@ -8,6 +8,7 @@ interface AccountService {
 
     fun add(request: InsertAccountRequest): Account
     fun get(accountId: Long): Account
+    fun getAll(): List<Account>
 
     class InsertAccountRequest private constructor(
         val name: String,

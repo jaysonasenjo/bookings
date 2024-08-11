@@ -1,10 +1,8 @@
 syntax = "proto3";
 package space.mjadev.accountor.bookings.api;
 
-import "google/protobuf/timestamp.proto";
-
 message Account {
-  int32 accountId = 1;
+  int64 accountId = 1;
   string userId = 2;
   string name = 3;
   string description = 4;
@@ -12,7 +10,7 @@ message Account {
 }
 
 message Booking {
-  int32 bookingId = 1;
+  int64 bookingId = 1;
   string name = 2;
   double amount = 3;
   string currency = 4;
@@ -23,5 +21,5 @@ message AccountRequest {}
 
 service AccountHandler {
 
-  rpc GetAccount (AccountRequest) returns (Account);
+  rpc GetAccount (AccountRequest) returns (stream Account);
 }
