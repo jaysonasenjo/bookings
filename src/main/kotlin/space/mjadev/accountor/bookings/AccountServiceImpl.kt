@@ -3,7 +3,6 @@ package space.mjadev.accountor.bookings
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.transaction.Transactional
 import space.mjadev.accountor.bookings.db.AccountRepository
-import space.mjadev.accountor.bookings.db.BookingRepository
 import space.mjadev.accountor.bookings.exceptions.http.NotFoundException
 import space.mjadev.accountor.bookings.exceptions.http.TechException
 import space.mjadev.accountor.bookings.models.Account
@@ -11,8 +10,7 @@ import space.mjadev.accountor.bookings.models.AccountMapper
 
 @ApplicationScoped
 class AccountServiceImpl(
-    private val accountRepository: AccountRepository,
-    private val bookingRepository: BookingRepository
+    private val accountRepository: AccountRepository
 ): AccountService {
 
     @Transactional
@@ -21,7 +19,6 @@ class AccountServiceImpl(
 
     override fun get(accountId: Long): Account {
         val account = accountRepository.findById(accountId).orElseThrow { NotFoundException() }
-        account.bookings.addAll(bookingRepository.findBookingsByAccount(account))
         return AccountMapper.INSTANCE.map(account) ?: throw TechException()
     }
 

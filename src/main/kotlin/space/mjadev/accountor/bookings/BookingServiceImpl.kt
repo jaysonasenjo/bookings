@@ -17,7 +17,10 @@ class BookingServiceImpl(
     @Transactional
     override fun add(request: BookingService.InsertBookingRequest): Booking {
         val bookingDto = request.toDto()
-        bookingDto.account = accountRepository.findById(request.accountId).orElseThrow { NotFoundException() }
+        val linkedAccount = accountRepository.findById(request.accountId).orElseThrow { NotFoundException() }
+        bookingDto.account = linkedAccount
+        linkedAccount.bookings.add(bookingDto)
+
         return BookingMapper.INSTANCE.map(bookingRepository.save(bookingDto)) ?: throw TechException("failed to create $request")
     }
 }
