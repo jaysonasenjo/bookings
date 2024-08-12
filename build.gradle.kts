@@ -14,7 +14,6 @@ repositories {
 val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
-val h2DriverVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
@@ -24,7 +23,7 @@ dependencies {
 
     // Database: Hibernate Spring JPA
     implementation("io.quarkus:quarkus-spring-data-jpa")
-    implementation("io.quarkus:quarkus-jdbc-h2:$h2DriverVersion")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
 
     // protobuf for gRPC
     implementation("io.quarkus:quarkus-grpc")
