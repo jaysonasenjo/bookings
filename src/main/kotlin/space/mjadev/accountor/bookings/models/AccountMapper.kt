@@ -15,7 +15,6 @@ class AccountMapper private constructor() {
         accountId = accountId ?: throw TechException("missing id $this"),
         name = name,
         userId = user,
-        description = description,
-        bookings = bookings.mapNotNull { BookingMapper.INSTANCE.map(it) }
+        description = description
     )
 }

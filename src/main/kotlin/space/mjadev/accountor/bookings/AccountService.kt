@@ -1,29 +1,18 @@
 package space.mjadev.accountor.bookings
 
+import io.smallrye.mutiny.Multi
+import io.smallrye.mutiny.Uni
 import space.mjadev.accountor.bookings.db.AccountDto
 import space.mjadev.accountor.bookings.exceptions.http.InvalidArgumentException
 import space.mjadev.accountor.bookings.models.Account
+import java.util.stream.Stream
 
 interface AccountService {
 
-    fun add(request: InsertAccountRequest): Account
-    fun get(accountId: Long): Account
-    fun getAll(): List<Account>
+    fun add(name: String,
+            userId: String,
+            description: String? = null): Uni<Account>
+    fun get(accountId: Long): Uni<Account>
+    fun getAll(): Uni<List<Account>>
 
-    class InsertAccountRequest private constructor(
-        val name: String,
-        private val userId: String,
-        private val description: String?) {
-
-        companion object {
-            fun create(name: String,
-                       userId: String,
-                       description: String? = null): InsertAccountRequest {
-                if (name.isBlank() || userId.isBlank()) throw InvalidArgumentException()
-                return InsertAccountRequest(name, userId, description)
-            }
-        }
-
-        fun toDto(): AccountDto = AccountDto(name = name, user = userId, description = description)
-    }
 }

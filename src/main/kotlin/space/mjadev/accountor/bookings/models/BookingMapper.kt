@@ -13,6 +13,7 @@ class BookingMapper private constructor(){
 
     private fun BookingDto.toModel(): Booking = Booking(
         bookingId = bookingId ?: throw TechException("missing id $this"),
+        accountId = account?.accountId ?: throw TechException("missing accountId $this"),
         name = name,
         amount = amount,
         currency = currency,

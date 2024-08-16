@@ -7,7 +7,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 
 @Entity
-data class AccountDto(
+class AccountDto(
 
     @Id
     @GeneratedValue

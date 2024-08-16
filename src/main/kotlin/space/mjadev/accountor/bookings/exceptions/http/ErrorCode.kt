@@ -1,8 +1,12 @@
 package space.mjadev.accountor.bookings.exceptions.http
 
-enum class ErrorCode {
+enum class ErrorCode private constructor(
+    val code: Int
+) {
 
-    INVALID,
-    NOT_FOUND,
-    SERVER_ERROR
+    INVALID(3),
+    NOT_FOUND(5),
+    SERVER_ERROR(2);
+
+    fun getGrpcCode() = code
 }

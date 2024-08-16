@@ -1,7 +1,9 @@
 package space.mjadev.accountor.bookings.db
 
-import org.springframework.data.jpa.repository.JpaRepository
+import io.quarkus.hibernate.reactive.panache.PanacheRepository
+import jakarta.enterprise.context.ApplicationScoped
 
-interface AccountRepository: JpaRepository<AccountDto, Long>
+@ApplicationScoped
+class AccountRepository: PanacheRepository<AccountDto>
 
 

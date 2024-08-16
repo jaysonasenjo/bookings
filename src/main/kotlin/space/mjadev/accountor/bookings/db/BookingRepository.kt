@@ -1,8 +1,7 @@
 package space.mjadev.accountor.bookings.db
 
-import org.springframework.data.jpa.repository.JpaRepository
+import io.quarkus.hibernate.reactive.panache.PanacheRepository
+import jakarta.enterprise.context.ApplicationScoped
 
-interface BookingRepository: JpaRepository<BookingDto, Long> {
-
-    fun findBookingsByAccount(account: AccountDto): List<BookingDto>
-}
+@ApplicationScoped
+class BookingRepository: PanacheRepository<BookingDto>

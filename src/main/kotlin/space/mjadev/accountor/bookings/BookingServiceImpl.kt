@@ -1,11 +1,13 @@
 package space.mjadev.accountor.bookings
 
+import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.tuples.Tuple2
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.transaction.Transactional
+import space.mjadev.accountor.bookings.db.AccountDto
 import space.mjadev.accountor.bookings.db.AccountRepository
 import space.mjadev.accountor.bookings.db.BookingRepository
 import space.mjadev.accountor.bookings.exceptions.http.NotFoundException
-import space.mjadev.accountor.bookings.exceptions.http.TechException
 import space.mjadev.accountor.bookings.models.Booking
 import space.mjadev.accountor.bookings.models.BookingMapper
 
@@ -15,12 +17,10 @@ class BookingServiceImpl(
     private val bookingRepository: BookingRepository) : BookingService {
 
     @Transactional
-    override fun add(request: BookingService.InsertBookingRequest): Booking {
+    override fun add(request: BookingService.InsertBookingRequest): Uni<Booking> {
         val bookingDto = request.toDto()
-        val linkedAccount = accountRepository.findById(request.accountId).orElseThrow { NotFoundException() }
-        bookingDto.account = linkedAccount
+        val linkedAccount = accountRepository.findById(request.accountId).await().indefinitely()
         linkedAccount.bookings.add(bookingDto)
-
-        return BookingMapper.INSTANCE.map(bookingRepository.save(bookingDto)) ?: throw TechException("failed to create $request")
+        return bookingRepository.persist(bookingDto).map { BookingMapper.INSTANCE.map(it) }
     }
 }

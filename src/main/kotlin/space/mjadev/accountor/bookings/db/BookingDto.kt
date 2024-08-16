@@ -9,7 +9,7 @@ import jakarta.persistence.ManyToOne
 import java.math.BigDecimal
 
 @Entity
-data class BookingDto(
+class BookingDto(
     @Id
     @GeneratedValue
     @Column(name = "id_booking", nullable = false, updatable = false)

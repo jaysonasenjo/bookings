@@ -1,25 +1,36 @@
 syntax = "proto3";
 package space.mjadev.accountor.bookings.api;
 
+import "google/protobuf/empty.proto";
+
 message Account {
   int64 accountId = 1;
   string userId = 2;
   string name = 3;
   string description = 4;
-  repeated Booking bookings = 5;
+}
+
+message AccountList {
+  repeated Account accounts = 1;
 }
 
 message Booking {
   int64 bookingId = 1;
-  string name = 2;
-  double amount = 3;
-  string currency = 4;
-  string description = 5;
+  int64 accountId = 2;
+  string name = 3;
+  double amount = 4;
+  string currency = 5;
+  string description = 6;
 }
 
-message AccountRequest {}
+message CreateAccountRequest {
+  string name = 1;
+  string user = 2;
+  optional string description = 3;
+}
 
 service AccountHandler {
 
-  rpc GetAccount (AccountRequest) returns (stream Account);
+  rpc GetAccounts (google.protobuf.Empty) returns (AccountList);
+  rpc CreateAccount (CreateAccountRequest) returns (Account);
 }

@@ -1,5 +1,6 @@
 package space.mjadev.accountor.bookings
 
+import io.smallrye.mutiny.Uni
 import space.mjadev.accountor.bookings.db.BookingDto
 import space.mjadev.accountor.bookings.exceptions.http.InvalidArgumentException
 import space.mjadev.accountor.bookings.models.Booking
@@ -7,7 +8,7 @@ import java.math.BigDecimal
 
 interface BookingService {
 
-    fun add(request: InsertBookingRequest): Booking
+    fun add(request: InsertBookingRequest): Uni<Booking>
 
     class InsertBookingRequest private constructor(
         val name: String,
